@@ -1,8 +1,9 @@
-from sqlalchemy import orm
 import sqlalchemy as sa
-from app.services import protocols
-from app.adapters.database import models
+from sqlalchemy import orm
+
 from app import entities
+from app.adapters.database import models
+from app.services import protocols
 
 
 class ThemeDBGateway(
@@ -46,16 +47,12 @@ class ThemeDBGateway(
     ) -> list[entities.Theme]:
         query = sa.select(self.model).where(self.model.id.in_(theme_ids))
         instances = self._session.scalars(query)
-        return [
-            self._to_entity(instance) for instance in instances
-        ]
+        return [self._to_entity(instance) for instance in instances]
 
     def get_theme_list(self) -> list[entities.Theme]:
         query = sa.select(self.model)
         instances = self._session.scalars(query).unique().all()
-        return [
-            self._to_entity(instance) for instance in instances
-        ]
+        return [self._to_entity(instance) for instance in instances]
 
     def delete_by_id(self, theme_id: int):
         query = sa.select(self.model).where(self.model.id == theme_id)

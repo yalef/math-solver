@@ -1,6 +1,8 @@
 import typing
+
 import fastapi
 import pydantic
+
 from app.web import ioc
 
 
@@ -8,7 +10,7 @@ class ThemeDTO(pydantic.BaseModel):
     name: str
 
 
-router = fastapi.APIRouter(prefix="/themes")
+router = fastapi.APIRouter(prefix="/themes", tags=["themes"])
 
 
 @router.get("/")

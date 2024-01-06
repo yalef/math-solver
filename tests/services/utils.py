@@ -1,5 +1,5 @@
-from app.services import protocols
 from app import entities
+from app.services import protocols
 
 
 class FakeUow(protocols.UoW):

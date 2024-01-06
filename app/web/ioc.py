@@ -1,4 +1,5 @@
 import typing
+
 from app.services import interactors
 
 
@@ -61,4 +62,29 @@ class InteractorFactory(typing.Protocol):
     def create_task(
         self,
     ) -> typing.ContextManager[interactors.TaskCreate]:
+        pass
+
+    def get_taskset_by_id(
+        self,
+    ) -> typing.ContextManager[interactors.TaskSetGet]:
+        pass
+
+    def get_taskset_list(
+        self,
+    ) -> typing.ContextManager[interactors.TaskSetGetList]:
+        pass
+
+    def delete_taskset_by_id(
+        self,
+    ) -> typing.ContextManager[interactors.TaskSetDelete]:
+        pass
+
+    def create_taskset(
+        self,
+    ) -> typing.ContextManager[interactors.TaskSetCreate]:
+        pass
+
+    def solve_task(
+        self,
+    ) -> typing.ContextManager[interactors.TaskSetSolver]:
         pass

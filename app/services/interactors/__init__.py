@@ -1,4 +1,6 @@
+from .answer_crud import AnswerCreate, AnswerDelete, AnswerGet, AnswerGetList
+from .task_crud import TaskCreate, TaskDelete, TaskGet, TaskGetList
+from .taskset_crud import (TaskSetCreate, TaskSetDelete, TaskSetGet,
+                           TaskSetGetList)
 from .taskset_solver import TaskSetSolver
-from .task_crud import TaskGet, TaskGetList, TaskCreate, TaskDelete
-from .theme_crud import ThemeCreate, ThemeGet, ThemeDelete, ThemeGetList
-from .answer_crud import AnswerCreate, AnswerGet, AnswerDelete, AnswerGetList
+from .theme_crud import ThemeCreate, ThemeDelete, ThemeGet, ThemeGetList

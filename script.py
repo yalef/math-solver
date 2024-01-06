@@ -1,6 +1,5 @@
-from app.adapters.database import utils, gateways, models
 from app import entities
-
+from app.adapters.database import gateways, models, utils
 
 engine = utils.build_engine(
     db_url="postgresql://postgres:postgres@localhost:5432/postgres",

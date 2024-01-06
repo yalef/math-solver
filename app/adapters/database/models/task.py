@@ -1,7 +1,9 @@
-from .base import BaseModel
-from app.entities import TaskStatus
 import sqlalchemy as sa
 from sqlalchemy import orm
+
+from app.entities import TaskStatus
+
+from .base import BaseModel
 
 
 class TaskDBModel(BaseModel):
@@ -19,7 +21,9 @@ class TaskDBModel(BaseModel):
         sa.String(200),
         nullable=False,
     )
-    status: orm.Mapped[str] = orm.mapped_column(  # use only values from `entities.TaskStatus`
+    status: orm.Mapped[
+        str
+    ] = orm.mapped_column(  # use only values from `entities.TaskStatus`
         sa.String(15),
         default=TaskStatus.started,
         nullable=False,

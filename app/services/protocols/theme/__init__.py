@@ -1,2 +1,2 @@
 from .dto import ThemeDTO
-from .theme_gateway import ThemeReader, ThemeSaver, ThemeDeleter
+from .theme_gateway import ThemeDeleter, ThemeReader, ThemeSaver

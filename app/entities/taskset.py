@@ -1,4 +1,5 @@
 import dataclasses
+
 from .task import Task, TaskStatus
 
 
@@ -29,7 +30,4 @@ class TaskSet:
     @property
     def is_solved(self) -> bool:
         completed_statuses = [TaskStatus.completed, TaskStatus.failed]
-        return all([
-            task.status in completed_statuses
-            for task in self.tasks
-        ])
+        return all([task.status in completed_statuses for task in self.tasks])

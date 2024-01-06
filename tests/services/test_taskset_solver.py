@@ -1,7 +1,7 @@
 import pytest
+
+from app import entities, services
 from tests.services import utils
-from app import entities
-from app import services
 
 
 @pytest.fixture

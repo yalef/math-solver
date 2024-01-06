@@ -1,5 +1,6 @@
 import pytest
-from app.entities import TaskSet, Task, Answer, Theme
+
+from app.entities import Answer, Task, TaskSet, Theme
 
 
 @pytest.fixture

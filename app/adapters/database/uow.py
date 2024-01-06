@@ -1,5 +1,6 @@
-from app.services import protocols
 import sqlalchemy
+
+from app.services import protocols
 
 
 class DBUoW(protocols.UoW):

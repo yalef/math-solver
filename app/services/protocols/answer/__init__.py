@@ -1,2 +1,2 @@
+from .answer_gateway import AnswerDeleter, AnswerReader, AnswerSaver
 from .dto import AnswerDTO
-from .answer_gateway import AnswerReader, AnswerSaver, AnswerDeleter

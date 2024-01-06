@@ -1,8 +1,9 @@
-from sqlalchemy import orm
 import sqlalchemy as sa
-from app.services import protocols
-from app.adapters.database import models
+from sqlalchemy import orm
+
 from app import entities
+from app.adapters.database import models
+from app.services import protocols
 
 
 class TaskSetDBGateway(
@@ -26,21 +27,23 @@ class TaskSetDBGateway(
                     id=answer.id,
                     data=answer.data,
                     is_correct=answer.is_correct,
-                ) for answer in task.answers
+                )
+                for answer in task.answers
             ]
             themes = [
-                entities.Theme(id=theme.id, name=theme.name)
-                for theme in task.themes
+                entities.Theme(id=theme.id, name=theme.name) for theme in task.themes
             ]
-            tasks.append(entities.Task(
-                id=task.id,
-                taskset_id=query_model.id,
-                answers=answers,
-                themes=themes,
-                level=task.level,
-                description=task.description,
-                status=task.status,
-            ))
+            tasks.append(
+                entities.Task(
+                    id=task.id,
+                    taskset_id=query_model.id,
+                    answers=answers,
+                    themes=themes,
+                    level=task.level,
+                    description=task.description,
+                    status=task.status,
+                )
+            )
         return entities.TaskSet(
             id=query_model.id,
             tasks=tasks,
@@ -59,9 +62,7 @@ class TaskSetDBGateway(
     def get_taskset_list(self) -> list[entities.TaskSet]:
         query = sa.select(self.model)
         instances = self._session.scalars(query).unique()
-        return [
-            self._to_entity(instance) for instance in instances
-        ]
+        return [self._to_entity(instance) for instance in instances]
 
     def get_taskset_by_id(self, taskset_id: int) -> entities.TaskSet:
         query = sa.select(self.model).where(self.model.id == taskset_id)

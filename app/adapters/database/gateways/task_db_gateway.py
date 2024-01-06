@@ -1,8 +1,9 @@
-from sqlalchemy import orm
 import sqlalchemy as sa
-from app.services import protocols
-from app.adapters.database import models
+from sqlalchemy import orm
+
 from app import entities
+from app.adapters.database import models
+from app.services import protocols
 
 
 class TaskDBGateway(
@@ -29,8 +30,7 @@ class TaskDBGateway(
             for answer in query_model.answers
         ]
         themes = [
-            entities.Theme(id=theme.id, name=theme.name)
-            for theme in query_model.themes
+            entities.Theme(id=theme.id, name=theme.name) for theme in query_model.themes
         ]
         return entities.Task(
             id=query_model.id,
@@ -70,9 +70,7 @@ class TaskDBGateway(
     def get_task_list(self) -> list[entities.Task]:
         query = sa.select(self.model)
         instances = self._session.scalars(query).unique()
-        return [
-            self._to_entity(instance) for instance in instances
-        ]
+        return [self._to_entity(instance) for instance in instances]
 
     def get_tasks_list_by_taskset_id(
         self,
@@ -82,9 +80,7 @@ class TaskDBGateway(
             self.model.taskset_id == taskset_id,
         )
         instances = self._session.scalars(query).unique()
-        return [
-            self._to_entity(instance) for instance in instances
-        ]
+        return [self._to_entity(instance) for instance in instances]
 
     def get_task_by_id(self, task_id: int) -> entities.Task:
         query = sa.select(self.model).where(self.model.id == task_id)
@@ -96,9 +92,7 @@ class TaskDBGateway(
             self.model.id.in_(task_ids),
         )
         instances = self._session.scalars(query).unique()
-        return [
-            self._to_entity(instance) for instance in instances
-        ]
+        return [self._to_entity(instance) for instance in instances]
 
     def delete_by_id(self, task_id: int):
         query = sa.select(self.model).where(self.model.id == task_id)

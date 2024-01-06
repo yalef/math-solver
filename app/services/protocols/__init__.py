@@ -1,5 +1,5 @@
-from .task import TaskDTO, TaskReader, TaskSaver, TaskDeleter
-from .taskset import TaskSetDTO, TaskSetReader, TaskSetSaver, TaskSetDeleter
-from .answer import AnswerDTO, AnswerReader, AnswerSaver, AnswerDeleter
-from .theme import ThemeDTO, ThemeReader, ThemeSaver, ThemeDeleter
+from .answer import AnswerDeleter, AnswerDTO, AnswerReader, AnswerSaver
+from .task import TaskDeleter, TaskDTO, TaskReader, TaskSaver
+from .taskset import TaskSetDeleter, TaskSetDTO, TaskSetReader, TaskSetSaver
+from .theme import ThemeDeleter, ThemeDTO, ThemeReader, ThemeSaver
 from .uow import UoW

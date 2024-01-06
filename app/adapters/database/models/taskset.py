@@ -1,5 +1,6 @@
 import sqlalchemy as sa
 from sqlalchemy import orm
+
 from .base import BaseModel
 
 

@@ -1,6 +1,8 @@
 import typing
+
 import fastapi
 import pydantic
+
 from app.web import ioc
 
 
@@ -10,7 +12,7 @@ class TaskDTO(pydantic.BaseModel):
     theme_ids: list[int]
 
 
-task_router = fastapi.APIRouter(prefix="/tasks")
+task_router = fastapi.APIRouter(prefix="/tasks", tags=["tasks"])
 
 
 @task_router.get("/")

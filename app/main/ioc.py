@@ -1,9 +1,8 @@
 import contextlib
-from app.web import ioc
-from app.adapters.database import gateways
-from app.adapters.database import uow
-from app.adapters.database import utils
+
+from app.adapters.database import gateways, uow, utils
 from app.services import interactors
+from app.web import ioc
 
 
 class IoC(ioc.InteractorFactory):
@@ -14,6 +13,7 @@ class IoC(ioc.InteractorFactory):
         self._theme_gateway = gateways.ThemeDBGateway
         self._task_gateway = gateways.TaskDBGateway
         self._answer_gateway = gateways.AnswerDBGateway
+        self._taskset_gateway = gateways.TaskSetDBGateway
 
     @contextlib.contextmanager
     def get_theme_by_id(
@@ -170,5 +170,66 @@ class IoC(ioc.InteractorFactory):
         with uow:
             yield interactors.AnswerCreate(
                 uow=uow,
+                answer_gateway=answer_gateway,
+            )
+
+    @contextlib.contextmanager
+    def get_taskset_list(self) -> interactors.TaskSetGetList:
+        db_session = self._session_factory()
+        uow = self._uow(db_session)
+        taskset_gateway = self._taskset_gateway(db_session)
+        with uow:
+            yield interactors.TaskSetGetList(
+                uow=uow,
+                taskset_gateway=taskset_gateway,
+            )
+
+    @contextlib.contextmanager
+    def get_taskset_by_id(self) -> interactors.TaskSetGetList:
+        db_session = self._session_factory()
+        uow = self._uow(db_session)
+        taskset_gateway = self._taskset_gateway(db_session)
+        with uow:
+            yield interactors.TaskSetGet(
+                uow=uow,
+                taskset_gateway=taskset_gateway,
+            )
+
+    @contextlib.contextmanager
+    def delete_taskset_by_id(self) -> interactors.TaskSetGetList:
+        db_session = self._session_factory()
+        uow = self._uow(db_session)
+        taskset_gateway = self._taskset_gateway(db_session)
+        with uow:
+            yield interactors.TaskSetDelete(
+                uow=uow,
+                taskset_gateway=taskset_gateway,
+            )
+
+    @contextlib.contextmanager
+    def create_taskset(self) -> interactors.TaskSetGetList:
+        db_session = self._session_factory()
+        uow = self._uow(db_session)
+        taskset_gateway = self._taskset_gateway(db_session)
+        task_gateway = self._task_gateway(db_session)
+        with uow:
+            yield interactors.TaskSetCreate(
+                uow=uow,
+                taskset_gateway=taskset_gateway,
+                task_gateway=task_gateway,
+            )
+
+    @contextlib.contextmanager
+    def solve_task(self) -> interactors.TaskSetSolver:
+        db_session = self._session_factory()
+        uow = self._uow(db_session)
+        taskset_gateway = self._taskset_gateway(db_session)
+        task_gateway = self._task_gateway(db_session)
+        answer_gateway = self._answer_gateway(db_session)
+        with uow:
+            yield interactors.TaskSetSolver(
+                uow=uow,
+                task_gateway=task_gateway,
+                taskset_gateway=taskset_gateway,
                 answer_gateway=answer_gateway,
             )
