@@ -24,14 +24,16 @@ class TaskSetSolver:
         answer_dto: protocols.AnswerDTO,
     ) -> app.entities.TaskSet:
         answer = app.entities.Answer(
+            id=answer_dto.id,
             data=answer_dto.data,
             is_correct=answer_dto.is_correct,
         )
         task: app.entities.Task = self._task_gateway.get_task_by_id(task_id)
+        # taskset.solve_task(task, answer)
+        task.solve(answer)
+        self._task_gateway.save(task)
         taskset: app.entities.TaskSet = self._taskset_gateway.get_taskset_by_id(
             taskset_id
         )
-        taskset.solve_task(task, answer)
-        self._taskset_gateway.save(taskset)
         self._uow.commit()
         return taskset

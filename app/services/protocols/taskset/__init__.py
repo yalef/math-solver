@@ -1,2 +1,2 @@
 from .dto import TaskSetDTO
-from .taskset_gateway import TaskSetReader, TaskSetSaver
+from .taskset_gateway import TaskSetReader, TaskSetSaver, TaskSetDeleter

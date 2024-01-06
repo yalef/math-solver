@@ -20,6 +20,9 @@ class AnswerReader(typing.Protocol):
     def get_answer_by_id(self, answer_id: int) -> app.entities.Answer:
         pass
 
+    def get_answer_list(self) -> list[app.entities.Answer]:
+        pass
+
 
 class AnswerDeleter(typing.Protocol):
     def delete_by_id(self, answer_id: int):

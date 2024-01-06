@@ -17,6 +17,9 @@ class ThemeReader(typing.Protocol):
     ) -> list[app.entities.Theme]:
         pass
 
+    def get_theme_list(self) -> list[app.entities.Theme]:
+        pass
+
 
 class ThemeDeleter(typing.Protocol):
     def delete_by_id(self, theme_id: int):

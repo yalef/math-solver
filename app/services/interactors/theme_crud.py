@@ -46,3 +46,18 @@ class ThemeGet:
         theme = self._theme_gateway.get_theme_by_id(theme_id)
         self._uow.commit()
         return theme
+
+
+class ThemeGetList:
+    def __init__(
+        self,
+        uow: protocols.UoW,
+        theme_gateway: protocols.ThemeReader,
+    ):
+        self._uow = uow
+        self._theme_gateway = theme_gateway
+
+    def __call__(self) -> list[app.entities.Theme]:
+        themes = self._theme_gateway.get_theme_list()
+        self._uow.commit()
+        return themes
