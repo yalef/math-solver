@@ -7,6 +7,9 @@ class TaskSaver(typing.Protocol):
     def save(self, task: app.entities.Task):
         pass
 
+    def save_batch(self, tasks: list[app.entities.Task]):
+        pass
+
 
 class TaskReader(typing.Protocol):
     def get_tasks_list(self) -> list[app.entities.Task]:
@@ -22,6 +25,13 @@ class TaskReader(typing.Protocol):
         pass
 
     def get_tasks_by_ids(self, task_ids: list[int]) -> list[app.entities.Task]:
+        pass
+
+    def get_task_without_taskset_by_theme_and_level(
+        self,
+        theme: app.entities.Theme,
+        level: int,
+    ) -> app.entities.Task:
         pass
 
 

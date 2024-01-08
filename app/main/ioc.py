@@ -100,10 +100,12 @@ class IoC(ioc.InteractorFactory):
         db_session = self._session_factory()
         uow = self._uow(db_session)
         task_gateway = self._task_gateway(db_session)
+        answer_gateway = self._answer_gateway(db_session)
         with uow:
             yield interactors.TaskDelete(
                 uow=uow,
                 task_gateway=task_gateway,
+                answer_gateway=answer_gateway,
             )
 
     @contextlib.contextmanager
@@ -211,12 +213,10 @@ class IoC(ioc.InteractorFactory):
         db_session = self._session_factory()
         uow = self._uow(db_session)
         taskset_gateway = self._taskset_gateway(db_session)
-        task_gateway = self._task_gateway(db_session)
         with uow:
             yield interactors.TaskSetCreate(
                 uow=uow,
                 taskset_gateway=taskset_gateway,
-                task_gateway=task_gateway,
             )
 
     @contextlib.contextmanager

@@ -30,6 +30,7 @@ class TaskDBModel(BaseModel):
     )
     taskset_id: orm.Mapped[int] = orm.mapped_column(
         sa.ForeignKey("taskset.id"),
+        nullable=True,
     )
     taskset: orm.Mapped["TaskSetDBModel"] = orm.relationship(
         "TaskSetDBModel",

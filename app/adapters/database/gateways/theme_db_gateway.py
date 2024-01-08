@@ -46,7 +46,7 @@ class ThemeDBGateway(
         theme_ids: list[int],
     ) -> list[entities.Theme]:
         query = sa.select(self.model).where(self.model.id.in_(theme_ids))
-        instances = self._session.scalars(query)
+        instances = self._session.scalars(query).unique()
         return [self._to_entity(instance) for instance in instances]
 
     def get_theme_list(self) -> list[entities.Theme]:

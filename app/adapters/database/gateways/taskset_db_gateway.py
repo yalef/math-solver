@@ -56,7 +56,7 @@ class TaskSetDBGateway(
             self._session.add(instance)
         else:
             query = sa.select(self.model).where(self.model.id == taskset.id)
-            instance = self._session.scalars(query).one()
+            instance = self._session.scalars(query).unique().one()
             instance.name = taskset.name
 
     def get_taskset_list(self) -> list[entities.TaskSet]:
@@ -66,10 +66,10 @@ class TaskSetDBGateway(
 
     def get_taskset_by_id(self, taskset_id: int) -> entities.TaskSet:
         query = sa.select(self.model).where(self.model.id == taskset_id)
-        instance = self._session.scalars(query).one()
+        instance = self._session.scalars(query).unique().one()
         return self._to_entity(instance)
 
     def delete_by_id(self, taskset_id: int):
         query = sa.select(self.model).where(self.model.id == taskset_id)
-        instance = self._session.scalars(query).one()
+        instance = self._session.scalars(query).unique().one()
         self._session.delete(instance)

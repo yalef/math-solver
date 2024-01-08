@@ -47,6 +47,7 @@ class TaskCreate:
         themes = self._theme_gateway.get_theme_list_by_ids(task_dto.theme_ids)
 
         task = app.entities.Task(
+            id=None,
             taskset_id=task_dto.taskset_id,
             answers=[],
             themes=themes,

@@ -21,11 +21,15 @@ class TaskSetGateway(protocols.TaskSetReader, protocols.TaskSetSaver):
     pass
 
 
+class TaskGateway(protocols.TaskReader, protocols.TaskSaver):
+    pass
+
+
 class TaskSetSolver:
     def __init__(
         self,
         uow: protocols.UoW,
-        task_gateway: protocols.TaskReader,
+        task_gateway: TaskGateway,
         taskset_gateway: TaskSetGateway,
         answer_gateway: protocols.AnswerReader,
     ):
@@ -44,6 +48,25 @@ class TaskSetSolver:
         )
         task.solve(answer)
         self._task_gateway.save(task)
+
+        # if task was started and failed for the first time,
+        # then add correction tasks with same theme
+        if task.status == app.entities.TaskStatus.correction:
+            if task.level > 1:
+                level = task.level - 1
+            else:
+                level = 1
+            correction_tasks = [
+                self._task_gateway.get_task_without_taskset_by_theme_and_level(
+                    theme=theme,
+                    level=level,
+                ) for theme in task.themes
+            ]
+            for correction_task in correction_tasks:
+                correction_task.taskset_id = task.taskset_id
+                correction_task.status = app.entities.TaskStatus.correction
+            self._task_gateway.save_batch(correction_tasks)
+
         taskset: app.entities.TaskSet = self._taskset_gateway.get_taskset_by_id(
             task.taskset_id,
         )

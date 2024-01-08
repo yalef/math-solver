@@ -7,6 +7,7 @@ from app.web import ioc
 
 
 class TaskDTO(pydantic.BaseModel):
+    taskset_id: int | None
     level: int
     description: str
     theme_ids: list[int]

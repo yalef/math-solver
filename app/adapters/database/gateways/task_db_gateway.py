@@ -24,6 +24,7 @@ class TaskDBGateway(
         answers = [
             entities.Answer(
                 id=answer.id,
+                task_id=answer.task_id,
                 data=answer.data,
                 is_correct=answer.is_correct,
             )
@@ -34,7 +35,7 @@ class TaskDBGateway(
         ]
         return entities.Task(
             id=query_model.id,
-            taskset_id=query_model.id,
+            taskset_id=query_model.taskset_id,
             answers=answers,
             themes=themes,
             level=query_model.level,
@@ -61,16 +62,38 @@ class TaskDBGateway(
             self._session.add(instance)
         else:
             query = sa.select(self.model).where(self.model.id == task.id)
-            instance = self._session.scalars(query).one()
+            instance = self._session.scalars(query).unique().one()
             instance.level = task.level
             instance.description = task.description
             instance.status = task.status
             instance.themes.extend(related_theme_instances)
+            instance.taskset_id = task.taskset_id
+
+    def save_batch(self, tasks: list[entities.Task]):
+        for task in tasks:
+            self.save(task)
 
     def get_task_list(self) -> list[entities.Task]:
         query = sa.select(self.model)
         instances = self._session.scalars(query).unique()
         return [self._to_entity(instance) for instance in instances]
+
+    def get_task_without_taskset_by_theme_and_level(
+        self,
+        level: int,
+        theme: entities.Theme,
+    ) -> entities.Task:
+        relation_query = sa.select(self.relation_model).where(
+            self.relation_model.id == theme.id,
+        )
+        relation_instance = self._session.scalars(relation_query).unique().first()
+        query = sa.select(self.model).where(
+            self.model.taskset_id.is_(None),
+            self.model.themes.contains(relation_instance),
+            self.model.level == level,
+        )
+        instance = self._session.scalars(query).unique().first()
+        return self._to_entity(instance)
 
     def get_tasks_list_by_taskset_id(
         self,
@@ -84,7 +107,7 @@ class TaskDBGateway(
 
     def get_task_by_id(self, task_id: int) -> entities.Task:
         query = sa.select(self.model).where(self.model.id == task_id)
-        instance = self._session.scalars(query).one()
+        instance = self._session.scalars(query).unique().one()
         return self._to_entity(instance)
 
     def get_tasks_by_ids(self, task_ids: list[int]) -> list[entities.Task]:
@@ -96,5 +119,5 @@ class TaskDBGateway(
 
     def delete_by_id(self, task_id: int):
         query = sa.select(self.model).where(self.model.id == task_id)
-        instance = self._session.scalars(query).one()
+        instance = self._session.scalars(query).unique().one()
         self._session.delete(instance)

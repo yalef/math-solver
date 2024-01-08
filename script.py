@@ -1,3 +1,4 @@
+import sqlalchemy as sa
 from app import entities
 from app.adapters.database import gateways, models, utils
 
@@ -8,33 +9,15 @@ session_factory = utils.build_session_factory(engine)
 
 
 with session_factory() as session:
-    taskset = entities.TaskSet(id=None, name="New Taskset", tasks=[])
-    taskset_gateway = gateways.TaskSetDBGateway(session)
-    taskset_gateway.save(taskset)
-    tasksets = taskset_gateway.get_taskset_list()
-    print(tasksets)
+    theme_query = sa.select(models.ThemeDBModel)
+    theme_instance = session.scalars(theme_query).unique()
+    theme_ids = []
+    for theme in theme_instance:
+        theme_ids.append(theme.id)
 
-    theme = entities.Theme(
-        id=None,
-        name="New theme",
+    query = sa.select(models.TaskDBModel).where(
+        models.TaskDBModel.themes.any(models.ThemeDBModel.id.in_(theme_ids)),
     )
-    theme_gateway = gateways.ThemeDBGateway(session)
-    theme_gateway.save(theme)
-    themes = theme_gateway.get_theme_list()
-    print(themes)
-
-    task = entities.Task(
-        id=None,
-        taskset_id=tasksets[0].id,
-        answers=[],
-        themes=[themes[0]],
-        level=1,
-        description="test desc",
-        status=entities.TaskStatus.started,
-    )
-    task_gateway = gateways.TaskDBGateway(session)
-    task_gateway.save(task)
-    tasks = task_gateway.get_task_list()
-    print(tasks)
-
+    instances = session.scalars(query).unique()
     session.commit()
+    breakpoint()

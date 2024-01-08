@@ -13,7 +13,7 @@ class AnswerCreate:
 
     def __call__(self, answer_dto: protocols.AnswerDTO):
         answer = app.entities.Answer(
-            id=answer_dto.id,
+            id=None,
             task_id=answer_dto.task_id,
             data=answer_dto.data,
             is_correct=answer_dto.is_correct,

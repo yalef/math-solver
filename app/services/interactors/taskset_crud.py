@@ -37,19 +37,15 @@ class TaskSetCreate:
         self,
         uow: protocols.UoW,
         taskset_gateway: protocols.TaskSetSaver,
-        task_gateway: protocols.TaskReader,
     ):
         self._uow = uow
         self._taskset_gateway = taskset_gateway
-        self._task_gateway = task_gateway
 
-    def __call__(self, task_dto: protocols.TaskSetDTO) -> None:
-        tasks = self._task_gateway.get_tasks_by_ids(task_dto.task_ids)
+    def __call__(self, taskset_dto: protocols.TaskSetDTO) -> None:
         taskset = app.entities.TaskSet(
-            tasks=tasks,
-            solved_tasks=[],
-            correction_tasks=[],
-            failed_tasks=[],
+            id=None,
+            name=taskset_dto.name,
+            tasks=[],
         )
         self._taskset_gateway.save(taskset)
         self._uow.commit()

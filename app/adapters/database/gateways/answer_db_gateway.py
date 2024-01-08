@@ -22,6 +22,7 @@ class AnswerDBGateway(
     ) -> entities.Answer:
         return entities.Answer(
             id=query_model.id,
+            task_id=query_model.task_id,
             data=query_model.data,
             is_correct=query_model.is_correct,
         )
@@ -39,6 +40,7 @@ class AnswerDBGateway(
             instance = self._session.scalars(query).one()
             instance.data = answer.data
             instance.is_correct = answer.is_correct
+            instance.task_id = answer.task_id
 
     def save_batch(self, answers: list[entities.Answer]):
         for answer in answers:
@@ -61,12 +63,12 @@ class AnswerDBGateway(
 
     def get_answer_by_id(self, answer_id: int) -> entities.Answer:
         query = sa.select(self.model).where(self.model.id == answer_id)
-        instance = self._session.scalars(query).one()
+        instance = self._session.scalars(query).unique().one()
         return self._to_entity(instance)
 
     def delete_by_id(self, answer_id: int):
         query = sa.select(self.model).where(self.model.id == answer_id)
-        instance = self._session.scalars(query).one()
+        instance = self._session.scalars(query).unique().one()
         self._session.delete(instance)
 
     def delete_batch_by_task_id(self, task_id: int):

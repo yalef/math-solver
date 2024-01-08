@@ -32,4 +32,4 @@ class Task:
             if self.status == TaskStatus.correction:
                 self.status = TaskStatus.failed
             elif self.status == TaskStatus.started:
-                self.status == TaskStatus.correction
+                self.status = TaskStatus.correction
