@@ -1,14 +1,12 @@
-# API schema
-------------
-- GET /task-sets - get all task-sets
-- PUSH /task-sets - create new task-set
-- GET /task-sets/{id} - get certain task-set
-- PUT /task-sets/{id} - update certain task-set
-- DELETE /task-sets/{id} - delete certain task-set
-- GET /tasks - get all tasks
-- PUSH /tasks - create new task
-- GET /tasks/{id} - get certain task
-- PUT /tasks/{id} - update certain task
-- DELETE /tasks/{id} - delete certain task
-- POST /solve/{task-id} - solve certain task
-- POST /send/{task-set-id} - send solved task-set to tutor
+# Installation
+---
+```bash
+# init python env
+poetry install
+poetry shell
+
+# run database
+docker compose up -d --build
+# apply migrations for database
+alembic upgrade head
+```
