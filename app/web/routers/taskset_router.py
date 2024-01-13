@@ -5,6 +5,7 @@ import pydantic
 
 from app.services.interactors import taskset_solver
 from app.web import ioc
+from app import entities
 
 
 class TaskSetDTO(pydantic.BaseModel):
@@ -22,7 +23,7 @@ taskset_router = fastapi.APIRouter(prefix="/tasksets", tags=["tasksets"])
 @taskset_router.get("/")
 def get_taskset_list(
     container: typing.Annotated[ioc.InteractorFactory, fastapi.Depends()],
-):
+) -> list[entities.TaskSet]:
     with container.get_taskset_list() as get_taskset_list:
         return get_taskset_list()
 
@@ -31,7 +32,7 @@ def get_taskset_list(
 def get_taskset_by_id(
     container: typing.Annotated[ioc.InteractorFactory, fastapi.Depends()],
     taskset_id: int,
-):
+) -> entities.TaskSet:
     with container.get_taskset_by_id() as get_taskset_by_id:
         return get_taskset_by_id(taskset_id)
 
@@ -49,7 +50,7 @@ def delete_taskset_by_id(
 def create_taskset(
     container: typing.Annotated[ioc.InteractorFactory, fastapi.Depends()],
     taskset_dto: TaskSetDTO,
-):
+) -> entities.TaskSet:
     with container.create_taskset() as create_taskset:
         return create_taskset(taskset_dto)
 
@@ -58,7 +59,7 @@ def create_taskset(
 def solve_task(
     container: typing.Annotated[ioc.InteractorFactory, fastapi.Depends()],
     solve_dto: taskset_solver.SolveDTO,
-):
+) -> taskset_solver.TaskSetResultDTO:
     with container.solve_task() as solve_task:
         return solve_task(
             solve_dto=solve_dto,

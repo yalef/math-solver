@@ -43,7 +43,7 @@ class TaskCreate:
         self._task_gateway = task_gateway
         self._theme_gateway = theme_gateway
 
-    def __call__(self, task_dto: protocols.TaskDTO) -> None:
+    def __call__(self, task_dto: protocols.TaskDTO) -> app.entities.Task:
         themes = self._theme_gateway.get_theme_list_by_ids(task_dto.theme_ids)
 
         task = app.entities.Task(
@@ -55,9 +55,9 @@ class TaskCreate:
             description=task_dto.description,
         )
 
-        self._task_gateway.save(task)
+        saved_task = self._task_gateway.save(task)
         self._uow.commit()
-        return task
+        return saved_task
 
 
 class TaskDelete:

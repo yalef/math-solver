@@ -60,6 +60,7 @@ class TaskDBGateway(
             )
             instance.themes.extend(related_theme_instances)
             self._session.add(instance)
+            return self._to_entity(instance)
         else:
             query = sa.select(self.model).where(self.model.id == task.id)
             instance = self._session.scalars(query).unique().one()
@@ -68,6 +69,7 @@ class TaskDBGateway(
             instance.status = task.status
             instance.themes.extend(related_theme_instances)
             instance.taskset_id = task.taskset_id
+            return self._to_entity(instance)
 
     def save_batch(self, tasks: list[entities.Task]):
         for task in tasks:

@@ -41,14 +41,15 @@ class TaskSetCreate:
         self._uow = uow
         self._taskset_gateway = taskset_gateway
 
-    def __call__(self, taskset_dto: protocols.TaskSetDTO) -> None:
+    def __call__(self, taskset_dto: protocols.TaskSetDTO) -> app.entities.TaskSet:
         taskset = app.entities.TaskSet(
             id=None,
             name=taskset_dto.name,
             tasks=[],
         )
-        self._taskset_gateway.save(taskset)
+        saved_taskset = self._taskset_gateway.save(taskset)
         self._uow.commit()
+        return saved_taskset
 
 
 class TaskSetDelete:

@@ -11,15 +11,16 @@ class AnswerCreate:
         self._uow = uow
         self._gateway = answer_gateway
 
-    def __call__(self, answer_dto: protocols.AnswerDTO):
+    def __call__(self, answer_dto: protocols.AnswerDTO) -> app.entities.Answer:
         answer = app.entities.Answer(
             id=None,
             task_id=answer_dto.task_id,
             data=answer_dto.data,
             is_correct=answer_dto.is_correct,
         )
-        self._gateway.save(answer)
+        saved_instance = self._gateway.save(answer)
         self._uow.commit()
+        return saved_instance
 
 
 class AnswerDelete:

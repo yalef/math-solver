@@ -4,6 +4,7 @@ import fastapi
 import pydantic
 
 from app.web import ioc
+from app import entities
 
 
 class ThemeDTO(pydantic.BaseModel):
@@ -16,7 +17,7 @@ router = fastapi.APIRouter(prefix="/themes", tags=["themes"])
 @router.get("/")
 def get_theme_list(
     container: typing.Annotated[ioc.InteractorFactory, fastapi.Depends()],
-):
+) -> list[entities.Theme]:
     with container.get_theme_list() as get_theme_list:
         return get_theme_list()
 

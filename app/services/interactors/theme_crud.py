@@ -11,12 +11,13 @@ class ThemeCreate:
         self._uow = uow
         self._theme_gateway = theme_gateway
 
-    def __call__(self, theme_dto: protocols.ThemeDTO) -> None:
+    def __call__(self, theme_dto: protocols.ThemeDTO) -> app.entities.Theme:
         theme = app.entities.Theme(
             name=theme_dto.name,
         )
-        self._theme_gateway.save(theme)
+        saved_theme = self._theme_gateway.save(theme)
         self._uow.commit()
+        return saved_theme
 
 
 class ThemeDelete:

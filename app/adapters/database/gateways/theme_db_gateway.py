@@ -25,16 +25,18 @@ class ThemeDBGateway(
             name=query_model.name,
         )
 
-    def save(self, theme: entities.Theme):
+    def save(self, theme: entities.Theme) -> entities.Theme:
         if theme.id is None:
             instance = self.model(
                 name=theme.name,
             )
             self._session.add(instance)
+            return self._to_entity(instance)
         else:
             query = sa.select(self.model).where(self.model.id == theme.id)
             instance = self._session.scalars(query).one()
             instance.name = theme.name
+            return self._to_entity(instance)
 
     def get_theme_by_id(self, theme_id: int) -> entities.Theme:
         query = sa.select(self.model).where(self.model.id == theme_id)
