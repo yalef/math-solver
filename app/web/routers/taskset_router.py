@@ -3,9 +3,9 @@ import typing
 import fastapi
 import pydantic
 
+from app import entities
 from app.services.interactors import taskset_solver
 from app.web import ioc
-from app import entities
 
 
 class TaskSetDTO(pydantic.BaseModel):

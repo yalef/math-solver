@@ -3,8 +3,8 @@ import typing
 import fastapi
 import pydantic
 
-from app.web import ioc
 from app import entities
+from app.web import ioc
 
 
 class ThemeDTO(pydantic.BaseModel):

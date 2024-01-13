@@ -3,11 +3,19 @@ import typing
 import fastapi
 import pydantic
 
-from app.web import ioc
 from app import entities
+from app.web import ioc
 
 
 class TaskDTO(pydantic.BaseModel):
+    taskset_id: int | None
+    level: int
+    description: str
+    theme_ids: list[int]
+
+
+class TaskUpdateDTO(pydantic.BaseModel):
+    id: int
     taskset_id: int | None
     level: int
     description: str
@@ -50,3 +58,12 @@ def create_task(
 ) -> entities.Task:
     with container.create_task() as create_task:
         return create_task(task_dto)
+
+
+@task_router.put("/")
+def update_task(
+    container: typing.Annotated[ioc.InteractorFactory, fastapi.Depends()],
+    task_dto: TaskUpdateDTO,
+):
+    with container.update_task() as update_task:
+        return update_task(task_dto)

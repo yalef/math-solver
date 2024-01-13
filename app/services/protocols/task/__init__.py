@@ -1,2 +1,2 @@
-from .dto import TaskDTO
+from .dto import TaskDTO, TaskUpdateDTO
 from .task_gateway import TaskDeleter, TaskReader, TaskSaver

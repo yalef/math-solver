@@ -11,3 +11,8 @@ class TaskDTO(typing.Protocol):
     img: bytes | None
     answers: list[AnswerDTO]
     theme_ids: list[int]
+
+
+class TaskUpdateDTO(typing.Protocol):
+    id: int
+    taskset_id: int

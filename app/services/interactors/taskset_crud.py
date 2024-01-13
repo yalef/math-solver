@@ -56,7 +56,8 @@ class TaskSetCreate:
                 for answer in task.answers
             ]
             themes = [
-                app.entities.Theme(id=theme.id, name=theme.name) for theme in task.themes
+                app.entities.Theme(id=theme.id, name=theme.name)
+                for theme in task.themes
             ]
             tasks.append(
                 app.entities.Task(

@@ -58,9 +58,11 @@ class TaskSetSolver:
                 level = 1
             correction_tasks = []
             for theme in task.themes:
-                cor_task = self._task_gateway.get_task_without_taskset_by_theme_and_level(
-                    theme=theme,
-                    level=level,
+                cor_task = (
+                    self._task_gateway.get_task_without_taskset_by_theme_and_level(
+                        theme=theme,
+                        level=level,
+                    )
                 )
                 if cor_task is not None:
                     correction_tasks.append(cor_task)

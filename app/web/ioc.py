@@ -1,11 +1,10 @@
-import typing
 import abc
+import typing
 
 from app.services import interactors
 
 
 class InteractorFactory(abc.ABC):
-
     @abc.abstractmethod
     def get_theme_by_id(
         self,
@@ -76,6 +75,12 @@ class InteractorFactory(abc.ABC):
     def create_task(
         self,
     ) -> typing.ContextManager[interactors.TaskCreate]:
+        pass
+
+    @abc.abstractmethod
+    def update_task(
+        self,
+    ) -> typing.ContextManager[interactors.TaskUpdate]:
         pass
 
     @abc.abstractmethod

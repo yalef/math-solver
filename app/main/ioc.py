@@ -124,6 +124,21 @@ class IoC(ioc.InteractorFactory):
             )
 
     @contextlib.contextmanager
+    def update_task(
+        self,
+    ) -> interactors.TaskUpdate:
+        db_session = self._session_factory()
+        uow = self._uow(db_session)
+        task_gateway = self._task_gateway(db_session)
+        theme_gateway = self._theme_gateway(db_session)
+        with uow:
+            yield interactors.TaskUpdate(
+                uow=uow,
+                task_gateway=task_gateway,
+                theme_gateway=theme_gateway,
+            )
+
+    @contextlib.contextmanager
     def get_answer_by_id(
         self,
     ) -> interactors.AnswerGet:

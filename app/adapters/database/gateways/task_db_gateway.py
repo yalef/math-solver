@@ -95,7 +95,8 @@ class TaskDBGateway(
             self.model.level == level,
         )
         instance = self._session.scalars(query).unique().first()
-        if instance is None: return
+        if instance is None:
+            return
         return self._to_entity(instance)
 
     def get_tasks_list_by_taskset_id(
