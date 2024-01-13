@@ -11,13 +11,23 @@ class ThemeCreate:
         self._uow = uow
         self._theme_gateway = theme_gateway
 
+    def _to_entity(
+        self,
+        query_model,
+    ) -> app.entities.Theme:
+        return app.entities.Theme(
+            id=query_model.id,
+            name=query_model.name,
+        )
+
     def __call__(self, theme_dto: protocols.ThemeDTO) -> app.entities.Theme:
         theme = app.entities.Theme(
             name=theme_dto.name,
         )
         saved_theme = self._theme_gateway.save(theme)
         self._uow.commit()
-        return saved_theme
+        entity = self._to_entity(saved_theme)
+        return entity
 
 
 class ThemeDelete:

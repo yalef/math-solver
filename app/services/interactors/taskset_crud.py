@@ -41,6 +41,40 @@ class TaskSetCreate:
         self._uow = uow
         self._taskset_gateway = taskset_gateway
 
+    def _to_entity(
+        self,
+        query_model,
+    ) -> app.entities.TaskSet:
+        tasks = []
+        for task in query_model.tasks:
+            answers = [
+                app.entities.Answer(
+                    id=answer.id,
+                    data=answer.data,
+                    is_correct=answer.is_correct,
+                )
+                for answer in task.answers
+            ]
+            themes = [
+                app.entities.Theme(id=theme.id, name=theme.name) for theme in task.themes
+            ]
+            tasks.append(
+                app.entities.Task(
+                    id=task.id,
+                    taskset_id=query_model.id,
+                    answers=answers,
+                    themes=themes,
+                    level=task.level,
+                    description=task.description,
+                    status=task.status,
+                )
+            )
+        return app.entities.TaskSet(
+            id=query_model.id,
+            tasks=tasks,
+            name=query_model.name,
+        )
+
     def __call__(self, taskset_dto: protocols.TaskSetDTO) -> app.entities.TaskSet:
         taskset = app.entities.TaskSet(
             id=None,
@@ -49,7 +83,8 @@ class TaskSetCreate:
         )
         saved_taskset = self._taskset_gateway.save(taskset)
         self._uow.commit()
-        return saved_taskset
+        entity = self._to_entity(saved_taskset)
+        return entity
 
 
 class TaskSetDelete:

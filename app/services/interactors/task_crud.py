@@ -43,6 +43,32 @@ class TaskCreate:
         self._task_gateway = task_gateway
         self._theme_gateway = theme_gateway
 
+    def _to_entity(
+        self,
+        query_model,
+    ) -> app.entities.Task:
+        answers = [
+            app.entities.Answer(
+                id=answer.id,
+                task_id=answer.task_id,
+                data=answer.data,
+                is_correct=answer.is_correct,
+            )
+            for answer in query_model.answers
+        ]
+        themes = [
+            app.entities.Theme(id=theme.id, name=theme.name) for theme in query_model.themes
+        ]
+        return app.entities.Task(
+            id=query_model.id,
+            taskset_id=query_model.taskset_id,
+            answers=answers,
+            themes=themes,
+            level=query_model.level,
+            description=query_model.description,
+            status=query_model.status,
+        )
+
     def __call__(self, task_dto: protocols.TaskDTO) -> app.entities.Task:
         themes = self._theme_gateway.get_theme_list_by_ids(task_dto.theme_ids)
 
@@ -57,7 +83,8 @@ class TaskCreate:
 
         saved_task = self._task_gateway.save(task)
         self._uow.commit()
-        return saved_task
+        entity = self._to_entity(saved_task)
+        return entity
 
 
 class TaskDelete:

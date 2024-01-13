@@ -11,6 +11,14 @@ class AnswerCreate:
         self._uow = uow
         self._gateway = answer_gateway
 
+    def _to_entity(self, query_model) -> app.entities.Answer:
+        return app.entities.Answer(
+            id=query_model.id,
+            task_id=query_model.task_id,
+            data=query_model.data,
+            is_correct=query_model.is_correct,
+        )
+
     def __call__(self, answer_dto: protocols.AnswerDTO) -> app.entities.Answer:
         answer = app.entities.Answer(
             id=None,
@@ -20,7 +28,8 @@ class AnswerCreate:
         )
         saved_instance = self._gateway.save(answer)
         self._uow.commit()
-        return saved_instance
+        entity = self._to_entity(saved_instance)
+        return entity
 
 
 class AnswerDelete:

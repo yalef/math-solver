@@ -50,16 +50,16 @@ class TaskSetDBGateway(
             name=query_model.name,
         )
 
-    def save(self, taskset: entities.TaskSet):
+    def save(self, taskset: entities.TaskSet) -> models.TaskSetDBModel:
         if taskset.id is None:
             instance = self.model(name=taskset.name)
             self._session.add(instance)
-            return self._to_entity(instance)
+            return instance
         else:
             query = sa.select(self.model).where(self.model.id == taskset.id)
             instance = self._session.scalars(query).unique().one()
             instance.name = taskset.name
-            return self._to_entity(instance)
+            return instance
 
     def get_taskset_list(self) -> list[entities.TaskSet]:
         query = sa.select(self.model)

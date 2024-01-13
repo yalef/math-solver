@@ -27,7 +27,7 @@ class AnswerDBGateway(
             is_correct=query_model.is_correct,
         )
 
-    def save(self, answer: entities.Answer) -> entities.Answer:
+    def save(self, answer: entities.Answer) -> models.AnswerDBModel:
         if answer.id is None:
             instance = self.model(
                 task_id=answer.task_id,
@@ -35,14 +35,14 @@ class AnswerDBGateway(
                 is_correct=answer.is_correct,
             )
             self._session.add(instance)
-            return self._to_entity(instance)
+            return instance
         else:
             query = sa.select(self.model).where(self.model.id == answer.id)
             instance = self._session.scalars(query).one()
             instance.data = answer.data
             instance.is_correct = answer.is_correct
             instance.task_id = answer.task_id
-            return self._to_entity(instance)
+            return instance
 
     def save_batch(self, answers: list[entities.Answer]):
         for answer in answers:

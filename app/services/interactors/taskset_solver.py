@@ -56,12 +56,15 @@ class TaskSetSolver:
                 level = task.level - 1
             else:
                 level = 1
-            correction_tasks = [
-                self._task_gateway.get_task_without_taskset_by_theme_and_level(
+            correction_tasks = []
+            for theme in task.themes:
+                cor_task = self._task_gateway.get_task_without_taskset_by_theme_and_level(
                     theme=theme,
                     level=level,
-                ) for theme in task.themes
-            ]
+                )
+                if cor_task is not None:
+                    correction_tasks.append(cor_task)
+
             for correction_task in correction_tasks:
                 correction_task.taskset_id = task.taskset_id
                 correction_task.status = app.entities.TaskStatus.correction
