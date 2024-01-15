@@ -30,9 +30,9 @@ class TaskSetDBGateway(
                 )
                 for answer in task.answers
             ]
-            themes = [
+            themes = {
                 entities.Theme(id=theme.id, name=theme.name) for theme in task.themes
-            ]
+            }
             tasks.append(
                 entities.Task(
                     id=task.id,
