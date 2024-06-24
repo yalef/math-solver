@@ -20,6 +20,7 @@ def singleton(value: DependencyT) -> typing.Callable[[], DependencyT]:
 
 def create_app() -> fastapi.FastAPI:
     app = fastapi.FastAPI()
+    # TODO move to .env
     db_url = "postgresql://postgres:postgres@localhost:5432/postgres"
     container = ioc.IoC(db_url)
     app.dependency_overrides.update(
